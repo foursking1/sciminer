@@ -8,7 +8,7 @@
     {
       "name": "sciminer",
       "description": "Claude Code skills for autonomous data extraction from scientific documents",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "source": "./",
       "author": {
         "name": "foursking1"
