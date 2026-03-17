@@ -1,4 +1,4 @@
-# Agentic Extractor
+# sciminer
 
 Claude Code skills for autonomous data extraction from scientific documents. Extract structured data from PDFs using AI-powered agents.
 
@@ -13,7 +13,7 @@ Claude Code skills for autonomous data extraction from scientific documents. Ext
 ## Installation
 
 ```bash
-npm install agentic-extractor
+npm install sciminer
 ```
 
 ## Quick Start

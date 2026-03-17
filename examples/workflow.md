@@ -7,7 +7,7 @@ This guide demonstrates a complete workflow for extracting data from scientific 
 ### 1. Install the Package
 
 ```bash
-npm install agentic-extractor
+npm install sciminer
 ```
 
 The skills, agents, and commands will be available in your Claude Code project.

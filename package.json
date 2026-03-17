@@ -1,5 +1,5 @@
 {
-  "name": "agentic-extractor",
+  "name": "sciminer",
   "version": "1.0.0",
   "description": "Claude Code skills for autonomous data extraction from scientific documents",
   "keywords": [
@@ -7,14 +7,20 @@
     "claude-skills",
     "data-extraction",
     "pdf-parsing",
-    "scientific-documents"
+    "scientific-documents",
+    "scientific-data",
+    "literature-mining"
   ],
-  "author": "",
+  "author": "foursking1",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/foursking1/sciminer.git"
   },
+  "bugs": {
+    "url": "https://github.com/foursking1/sciminer/issues"
+  },
+  "homepage": "https://github.com/foursking1/sciminer#readme",
   "files": [
     "agents/",
     "commands/",
