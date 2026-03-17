@@ -1,5 +1,8 @@
 # Claude Code local settings
-.claude/
+.claude/settings.local.json
+
+# But include the plugin directory
+!.claude-plugin/
 
 # Dependencies
 node_modules/

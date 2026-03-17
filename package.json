@@ -26,6 +26,7 @@
     "commands/",
     "skills/",
     "examples/",
+    ".claude-plugin/",
     "README.md",
     "LICENSE"
   ],

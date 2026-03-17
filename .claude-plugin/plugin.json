@@ -1,0 +1,12 @@
+{
+  "name": "sciminer",
+  "description": "Claude Code skills for autonomous data extraction from scientific documents",
+  "version": "1.0.0",
+  "author": {
+    "name": "foursking1"
+  },
+  "homepage": "https://github.com/foursking1/sciminer",
+  "repository": "https://github.com/foursking1/sciminer",
+  "license": "MIT",
+  "keywords": ["scientific-data", "extraction", "pdf-parsing", "literature-mining", "data-extraction"]
+}
