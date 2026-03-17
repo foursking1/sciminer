@@ -14,11 +14,16 @@ Claude Code skills for autonomous data extraction from scientific documents. Ext
 
 ### Option 1: Full Plugin (Recommended)
 
-Install skills, agents, and commands together:
+In Claude Code, register the marketplace first:
 
 ```
-/plugin marketplace https://github.com/foursking1/sciminer.git
+/plugin marketplace add https://github.com/foursking1/sciminer.git
 ```
+
+Then install the plugin from this marketplace:
+
+/plugin install foursking1@sciminer
+
 
 Or add to `~/.claude/settings.json`:
 

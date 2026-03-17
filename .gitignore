@@ -10,6 +10,7 @@ node_modules/
 # Output directories
 parsed_documents/
 extraction_outputs/
+*-workspace/
 
 # Python
 __pycache__/

@@ -1,0 +1,63 @@
+{
+  "schema_name": "shale_gas",
+  "description": "Extract geochemical and petrophysical data from shale gas research papers, including TOC, Ro, porosity, and mineral composition",
+  "fields": [
+    {
+      "name": "sample_id",
+      "type": "identifier",
+      "scope": "entity",
+      "data_type": "string",
+      "description": "Sample identifier or name"
+    },
+    {
+      "name": "depth_m",
+      "type": "property",
+      "data_type": "number",
+      "description": "Sample depth in meters"
+    },
+    {
+      "name": "toc_percent",
+      "type": "property",
+      "data_type": "number",
+      "description": "Total organic carbon (TOC) in weight percent"
+    },
+    {
+      "name": "ro_percent",
+      "type": "property",
+      "data_type": "number",
+      "description": "Vitrinite reflectance (Ro) in percent"
+    },
+    {
+      "name": "porosity_percent",
+      "type": "property",
+      "data_type": "number",
+      "description": "Porosity in percent"
+    },
+    {
+      "name": "quartz_percent",
+      "type": "property",
+      "data_type": "number",
+      "description": "Quartz content in percent"
+    },
+    {
+      "name": "clay_percent",
+      "type": "property",
+      "data_type": "number",
+      "description": "Clay mineral content in percent"
+    },
+    {
+      "name": "formation",
+      "type": "property",
+      "data_type": "string",
+      "description": "Geological formation name"
+    },
+    {
+      "name": "basin",
+      "type": "property",
+      "data_type": "string",
+      "description": "Sedimentary basin name"
+    }
+  ],
+  "row_identity": ["sample_id"],
+  "entity_identity": ["sample_id"]
+}

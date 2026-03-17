@@ -1,0 +1,40 @@
+{
+  "skill_name": "data-extractor",
+  "evals": [
+    {
+      "id": 1,
+      "name": "basic-extraction",
+      "prompt": "Extract data from this document using the fossil schema. The document is at examples/test_docs/keller_excerpt.md and contains a table with fossil species data.",
+      "expected_output": "CSV file with fossil_name, geologic_time, geographic_location, water_depth, ecologic_type columns, plus extraction_plan.md and intermediate_data.json",
+      "files": ["examples/test_docs/keller_excerpt.md"],
+      "assertions": [
+        {"name": "csv_created", "description": "Output CSV file exists with correct columns", "type": "file_exists", "path": "extraction_outputs/*/keller_excerpt/output.csv"},
+        {"name": "has_provenance", "description": "Extraction plan and intermediate data created", "type": "file_exists", "path": "extraction_outputs/*/keller_excerpt/extraction_plan.md"},
+        {"name": "correct_columns", "description": "CSV has all schema columns plus document_id", "type": "csv_columns", "expected": ["document_id", "fossil_name", "geologic_time", "geographic_location", "water_depth", "ecologic_type", "formation", "latitude", "longitude"]},
+        {"name": "extracted_instances", "description": "At least 3 fossil instances extracted", "type": "row_count", "min": 3}
+      ]
+    },
+    {
+      "id": 2,
+      "name": "schema-inference",
+      "prompt": "I have a document about shale gas geochemical data. Extract the sample measurements from it. The document is at examples/test_docs/shale_excerpt.md",
+      "expected_output": "Should either use shale_gas schema or ask user to specify schema. If shale_gas schema used, extract sample_id, depth_m, toc_percent, etc.",
+      "files": ["examples/test_docs/shale_excerpt.md"],
+      "assertions": [
+        {"name": "schema_selected", "description": "Either used built-in schema or asked user to specify", "type": "content_check", "patterns": ["shale_gas", "schema", "which schema"]},
+        {"name": "csv_created", "description": "Output CSV file exists", "type": "file_exists", "path": "extraction_outputs/*/*/output.csv"}
+      ]
+    },
+    {
+      "id": 3,
+      "name": "context-row-separation",
+      "prompt": "Extract fossil data from this document. Pay attention: the same species appears in different geological time periods. Document: examples/test_docs/multi_period.md",
+      "expected_output": "CSV with multiple rows for the same species when it appears in different time periods (context creates separate rows)",
+      "files": ["examples/test_docs/multi_period.md"],
+      "assertions": [
+        {"name": "context_separation", "description": "Same species in different time periods creates separate rows", "type": "custom", "check": "Verify that if a species appears in multiple time periods, there are multiple rows"},
+        {"name": "row_identity_correct", "description": "Row identity combines fossil_name + geologic_time + geographic_location", "type": "csv_columns", "expected": ["fossil_name", "geologic_time", "geographic_location"]}
+      ]
+    }
+  ]
+}
