@@ -22,8 +22,9 @@ In Claude Code, register the marketplace first:
 
 Then install the plugin from this marketplace:
 
+```
 /plugin install foursking1@sciminer
-
+```
 
 Or add to `~/.claude/settings.json`:
 
