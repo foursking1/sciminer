@@ -1,0 +1,41 @@
+{
+  "name": "agentic-extractor",
+  "version": "1.0.0",
+  "description": "Claude Code skills for autonomous data extraction from scientific documents",
+  "keywords": [
+    "claude-code",
+    "claude-skills",
+    "data-extraction",
+    "pdf-parsing",
+    "scientific-documents"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "files": [
+    "agents/",
+    "commands/",
+    "skills/",
+    "examples/",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "claude-code": {
+    "skills": [
+      "skills/document-ingestion",
+      "skills/schema-creator"
+    ],
+    "agents": [
+      "agents/extractor"
+    ],
+    "commands": [
+      "commands/extract.md"
+    ]
+  }
+}

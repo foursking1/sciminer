@@ -1,0 +1,57 @@
+{
+  "schema_name": "fossil",
+  "description": "Extract fossil occurrence data from paleontology papers, including species names, geological ages, locations, and ecological attributes",
+  "fields": [
+    {
+      "name": "fossil_name",
+      "type": "identifier",
+      "scope": "entity",
+      "data_type": "string",
+      "description": "Fossil species scientific name"
+    },
+    {
+      "name": "geologic_time",
+      "type": "context",
+      "data_type": "string",
+      "description": "Geological age or time period (e.g., Eocene, Oligocene)"
+    },
+    {
+      "name": "geographic_location",
+      "type": "context",
+      "data_type": "string",
+      "description": "Geographic location where fossil was found"
+    },
+    {
+      "name": "water_depth",
+      "type": "property",
+      "data_type": "string",
+      "description": "Water depth range or bathymetric zone"
+    },
+    {
+      "name": "ecologic_type",
+      "type": "property",
+      "data_type": "string",
+      "description": "Ecological classification (e.g., benthic, planktic)"
+    },
+    {
+      "name": "formation",
+      "type": "property",
+      "data_type": "string",
+      "description": "Geological formation name"
+    },
+    {
+      "name": "latitude",
+      "type": "property",
+      "data_type": "string",
+      "description": "Latitude coordinate"
+    },
+    {
+      "name": "longitude",
+      "type": "property",
+      "data_type": "string",
+      "description": "Longitude coordinate"
+    }
+  ],
+  "row_identity": ["fossil_name", "geologic_time", "geographic_location"],
+  "entity_identity": ["fossil_name"]
+}

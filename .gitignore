@@ -1,0 +1,18 @@
+# Claude Code local settings
+.claude/
+
+# Dependencies
+node_modules/
+
+# Output directories
+parsed_documents/
+extraction_outputs/
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# OS
+.DS_Store
+Thumbs.db
