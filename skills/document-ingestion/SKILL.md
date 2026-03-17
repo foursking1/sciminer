@@ -1,6 +1,6 @@
 ---
 name: document-ingestion
-description: Parse PDF documents to Markdown using MinerU. Use this skill whenever you need to convert PDFs to markdown, extract text from scientific papers, or prepare documents for the extraction agent. Automatically caches parsed results to avoid re-processing.
+description: PDF-to-Markdown conversion using MinerU. THIS SKILL TRIGGERS FIRST when the user provides a PDF file path or asks to process/parse/convert a PDF. Always use this skill before data extraction from PDFs. Checks parsed_documents/ cache before processing.
 allowed-tools: [Read, Bash]
 ---
 

@@ -1,9 +1,16 @@
 ---
 name: extract
-description: Extract structured data from documents using a specified schema
+description: Extract structured data from documents using a specified schema. Automatically parses PDFs if needed.
 ---
 
 Extract data from the specified document(s).
+
+## Workflow
+
+```
+1. PDF provided? → Invoke document-ingestion skill to parse → Get markdown
+2. Markdown ready? → Invoke data-extractor skill with schema → Get CSV
+```
 
 ## Usage
 
