@@ -1,6 +1,6 @@
 {
   "name": "sciminer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude Code skills for autonomous data extraction from scientific documents",
   "keywords": [
     "claude-code",
@@ -36,7 +36,8 @@
   "claude-code": {
     "skills": [
       "skills/document-ingestion",
-      "skills/schema-creator"
+      "skills/schema-creator",
+      "skills/data-extractor"
     ],
     "agents": [
       "agents/extractor"
