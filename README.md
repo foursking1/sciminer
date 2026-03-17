@@ -12,8 +12,37 @@ Claude Code skills for autonomous data extraction from scientific documents. Ext
 
 ## Installation
 
+### Option 1: Full Plugin (Recommended)
+
+Install skills, agents, and commands together:
+
+```
+/plugin marketplace https://github.com/foursking1/sciminer.git
+```
+
+Or add to `~/.claude/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "sciminer": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/foursking1/sciminer.git"
+      }
+    }
+  }
+}
+```
+
+Then run `/plugin` to install.
+
+### Option 2: Skills Only
+
+Install only the skills (no agents or commands):
+
 ```bash
-npm install sciminer
+npx skills add foursking1/sciminer
 ```
 
 ## Quick Start
