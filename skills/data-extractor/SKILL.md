@@ -199,44 +199,22 @@ To use: `schemas/<schema_name>.json`
 ### Phase 3: Output
 
 1. **Check Missing Fields (SELF-CORRECTION)**
-   After extraction, identify fields with high NA rate (>50%):
-   ```
-   Missing Field Analysis:
-   - water_depth: 100% NA → Need to search document
-   - latitude: 100% NA → Need to search document
-   - ...
-   ```
 
-2. **Attempt to Fill Missing Fields**
-   For each field with high NA rate:
+   After extraction, check if any property field has >50% NA. If so, you must try to find the data before accepting NA.
 
-   **Step A: Generate search keywords from field name**
-   | Field | Search Keywords |
-   |-------|-----------------|
-   | water_depth | "depth", "water depth", "bathymetry", "mbsf" |
-   | latitude | "latitude", "lat", "°N", "°S", "coordinate" |
-   | longitude | "longitude", "lon", "°E", "°W", "coordinate" |
-   | formation | "formation", "unit", "member", "stratigraphic" |
-   | temperature | "temperature", "°C", "thermal" |
+   **How to search:**
+   - Think about what keywords might indicate this field in the document
+   - Use Grep to search the document for relevant terms
+   - Check if the value is stated once globally (e.g., in Abstract, Introduction, Methods) and applies to all entities
+   - If found, apply the value to all relevant records
 
-   **Step B: Search document using Grep**
-   ```bash
-   grep -i -n "depth\|water" document.md
-   ```
+   **Example:** If `water_depth` is 100% NA, search for "depth", "water depth", "bathymetry" in the document. You might find "The water depth at this site is 4809.8 m" - this applies globally to all fossils from this site.
 
-   **Step C: If found, extract and apply**
-   - If value is found and applies to ALL entities → Apply globally
-   - If value varies by entity → Apply per-entity
-   - Document the source location
+   **If not found:** Document that you searched and could not find the information.
 
-   **Step D: If NOT found, justify NA**
-   ```
-   water_depth: NA - Searched for "depth", "water depth" - No relevant values found in document
-   ```
-
-3. Final validation
-4. Generate CSV with provenance
-5. Report: instance count, field coverage, issues, NA justifications
+2. Final validation
+3. Generate CSV with provenance
+4. Report: instance count, field coverage, issues, NA justifications
 
 ## HARD CONSTRAINTS
 
