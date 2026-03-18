@@ -164,39 +164,12 @@ To use: `schemas/<schema_name>.json`
    TOTAL EXPECTED INSTANCES: [sum]
    ```
 
-   #### Step 3.4: Extract Global/Site-Level Attributes
-   **CRITICAL**: Many scientific papers have site-level or study-level attributes that apply to ALL entities.
-
-   **Common Global Attributes:**
-   | Field | Typical Source | Example |
-   |-------|----------------|---------|
-   | water_depth | Site description | "water depth at this site is 4809.8 m" |
-   | latitude | Coordinates section | "Site 841 is located at 20°S" |
-   | longitude | Coordinates section | "175°W" |
-   | formation | Stratigraphy section | "Unit V (549-605 mbsf)" |
-   | geographic_location | Abstract/Introduction | "Tonga forearc region" |
-
-   **How to Extract Global Attributes:**
-   1. Search for keywords: "site", "location", "depth", "coordinates", "formation", "latitude", "longitude"
-   2. Look in: Abstract, Introduction, Methods, Site Description sections
-   3. Record the value AND its source location
-   4. Apply to ALL extracted entities
-
-   **Example Output:**
-   ```
-   Global Attributes Found:
-   - water_depth: "4809.8 m" (Line 17: "The water depth at this site is 4809.8 m")
-   - latitude: "30-40°S (paleo)" (Line 208)
-   - geographic_location: "Site 841, Tonga forearc" (Line 17)
-   - formation: "Unit V volcanic sandstone" (Line 39)
-   ```
-
-   #### Step 3.5: Count Expected Instances
+   #### Step 3.4: Count Expected Instances
    - Count entities in EACH table/section separately
    - Sum all counts to get TOTAL expected instances
    - Document this count - you will verify against it later
 
-   #### Step 3.6: Validate Scan Completeness
+   #### Step 3.5: Validate Scan Completeness
    Before proceeding to extraction, verify:
    - [ ] Entire document scanned (directly or via agents)
    - [ ] All tables identified and counted
@@ -225,9 +198,45 @@ To use: `schemas/<schema_name>.json`
 
 ### Phase 3: Output
 
-1. Final validation
-2. Generate CSV with provenance
-3. Report: instance count, field coverage, issues
+1. **Check Missing Fields (SELF-CORRECTION)**
+   After extraction, identify fields with high NA rate (>50%):
+   ```
+   Missing Field Analysis:
+   - water_depth: 100% NA → Need to search document
+   - latitude: 100% NA → Need to search document
+   - ...
+   ```
+
+2. **Attempt to Fill Missing Fields**
+   For each field with high NA rate:
+
+   **Step A: Generate search keywords from field name**
+   | Field | Search Keywords |
+   |-------|-----------------|
+   | water_depth | "depth", "water depth", "bathymetry", "mbsf" |
+   | latitude | "latitude", "lat", "°N", "°S", "coordinate" |
+   | longitude | "longitude", "lon", "°E", "°W", "coordinate" |
+   | formation | "formation", "unit", "member", "stratigraphic" |
+   | temperature | "temperature", "°C", "thermal" |
+
+   **Step B: Search document using Grep**
+   ```bash
+   grep -i -n "depth\|water" document.md
+   ```
+
+   **Step C: If found, extract and apply**
+   - If value is found and applies to ALL entities → Apply globally
+   - If value varies by entity → Apply per-entity
+   - Document the source location
+
+   **Step D: If NOT found, justify NA**
+   ```
+   water_depth: NA - Searched for "depth", "water depth" - No relevant values found in document
+   ```
+
+3. Final validation
+4. Generate CSV with provenance
+5. Report: instance count, field coverage, issues, NA justifications
 
 ## HARD CONSTRAINTS
 
@@ -237,6 +246,7 @@ To use: `schemas/<schema_name>.json`
 4. **Every property attempted for every instance** - mark NA only after exhaustive search
 5. **Count expected instances BEFORE extraction** - verify: extracted >= expected
 6. **If extracted < expected** - STOP and re-scan document for missing data sources
+7. **Check and fill missing fields before final output** - NEVER output >50% NA without searching document first
 
 ## Large Document Handling
 
@@ -310,6 +320,7 @@ Before marking complete:
 - [ ] **Data Source Inventory completed** (all tables/sections listed)
 - [ ] All instances extracted (count matches expected)
 - [ ] Extracted count >= Pre-Scan expected count
+- [ ] **Missing fields checked and searched** (Phase 3 Step 1-2)
 - [ ] All properties attempted for all instances
 - [ ] No property has >50% NA without justification
 - [ ] Layer 3 Completeness Audit passed
