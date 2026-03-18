@@ -1,6 +1,6 @@
 ---
 name: data-extractor
-description: Extract structured scientific data from PARSED markdown documents into CSV datasets. Use this skill when you have markdown files (from parsed_documents/) and need to extract tabular data using a schema. This skill expects already-parsed markdown input. If user provides a PDF, invoke document-ingestion skill FIRST to parse it.
+description: Extract structured scientific data from PARSED markdown documents into CSV datasets. Use this skill when you have markdown files (from parsed_documents/) and need to extract tabular data using a schema. If schema doesn't exist, invoke schema-creator skill to create one. If user provides a PDF, invoke document-ingestion skill FIRST to parse it.
 allowed-tools: [Read, Write, Edit, Glob, Grep, Bash, Agent]
 ---
 
@@ -25,9 +25,48 @@ Autonomous data extraction agent that extracts structured scientific data from l
 
 ```
 1. Check if document is parsed (parsed_documents/<doc_name>/output_mineru.md)
-2. If not, use document-ingestion skill to parse
-3. Read the extraction schema
-4. Execute extraction workflow
+   - If NOT parsed: invoke document-ingestion skill FIRST
+2. Resolve schema:
+   - If schema_name provided: check schemas/<schema_name>.json exists
+   - If schema MISSING: invoke schema-creator skill to create it
+   - If no schema_name: list available schemas, or invoke schema-creator
+3. Execute extraction workflow
+```
+
+## Schema Resolution (REQUIRED BEFORE EXTRACTION)
+
+**You MUST resolve the schema BEFORE starting extraction. Do NOT skip this step.**
+
+### Step 1: Check Schema Exists
+
+```bash
+# Check if schema file exists
+ls schemas/<schema_name>.json
+```
+
+### Step 2: Handle Missing Schema
+
+**If schema file does NOT exist, you MUST invoke schema-creator skill:**
+
+```
+Use the Skill tool to invoke schema-creator skill with:
+- Document path or parsed markdown
+- User's extraction requirements
+- Any example output they provided
+```
+
+**Do NOT proceed with extraction until schema is resolved.**
+
+### Step 3: Schema Selection Flow
+
+```
+User provides schema_name?
+├─ YES → schemas/<schema_name>.json exists?
+│         ├─ YES → Use this schema
+│         └─ NO → Invoke schema-creator skill
+└─ NO → List available schemas in schemas/
+        ├─ User selects one → Use selected schema
+        └─ User wants new → Invoke schema-creator skill
 ```
 
 ## Schema Field Types (CRITICAL)
@@ -164,8 +203,22 @@ Before marking complete:
 
 ## Integration with Other Skills
 
-- **document-ingestion**: Use to parse PDFs before extraction
-- **schema-creator**: Use to create new extraction schemas
+### document-ingestion
+Invoke BEFORE extraction when user provides a PDF:
+```
+Skill tool → document-ingestion → parse PDF → get markdown
+```
+
+### schema-creator
+Invoke BEFORE extraction when schema is missing:
+```
+Skill tool → schema-creator → create schema → save to schemas/
+```
+
+**When to invoke schema-creator:**
+- User's specified schema doesn't exist in `schemas/`
+- User has no schema and wants to create one
+- User asks to define extraction fields
 
 ## Reference Documentation
 
