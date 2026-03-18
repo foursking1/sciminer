@@ -200,17 +200,26 @@ To use: `schemas/<schema_name>.json`
 
 1. **Check Missing Fields (SELF-CORRECTION)**
 
-   After extraction, check if any property field has >50% NA. If so, you must try to find the data before accepting NA.
+   After extraction, check if any property field has >50% NA. If so, try these approaches before accepting NA:
 
-   **How to search:**
-   - Think about what keywords might indicate this field in the document
-   - Use Grep to search the document for relevant terms
-   - Check if the value is stated once globally (e.g., in Abstract, Introduction, Methods) and applies to all entities
-   - If found, apply the value to all relevant records
+   **Approach 1: Text Search**
+   - Search for the field name and related terms
+   - Consider synonyms and related concepts
 
-   **Example:** If `water_depth` is 100% NA, search for "depth", "water depth", "bathymetry" in the document. You might find "The water depth at this site is 4809.8 m" - this applies globally to all fossils from this site.
+   **Approach 2: Re-read Key Sections**
+   - If Grep fails, re-read Abstract, Introduction, Methods, Site Description
+   - These sections often contain global attributes
 
-   **If not found:** Document that you searched and could not find the information.
+   **Approach 3: Inference from Context**
+   - Can you infer the value from other information?
+   - Example: "below CCD" → water depth >4000m (CCD is typically 4000-5000m)
+   - Example: "subtropical" → paleo-latitude roughly 20-40°
+
+   **Approach 4: Check Figures and Tables**
+   - Some data may be in figure captions or table headers
+   - Re-examine any tables you identified during Pre-Scan
+
+   **If still not found:** Document what you tried and why the field is genuinely unavailable in this document.
 
 2. Final validation
 3. Generate CSV with provenance
@@ -221,10 +230,10 @@ To use: `schemas/<schema_name>.json`
 1. **Scan ENTIRE document before extraction** - use chunked Agent scanning for large documents
 2. **Extract ALL unique (identifier + context) combinations** - never filter based on perceived importance
 3. **Same identifier + different context = separate rows** - never merge
-4. **Every property attempted for every instance** - mark NA only after exhaustive search
+4. **Every property attempted for every instance** - mark NA only after Phase 3 self-correction
 5. **Count expected instances BEFORE extraction** - verify: extracted >= expected
 6. **If extracted < expected** - STOP and re-scan document for missing data sources
-7. **Check and fill missing fields before final output** - NEVER output >50% NA without searching document first
+7. **Never accept >50% NA without trying**: text search, re-reading key sections, inference, checking figures/tables
 
 ## Large Document Handling
 
