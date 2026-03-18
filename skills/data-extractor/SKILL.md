@@ -116,12 +116,43 @@ To use: `schemas/<schema_name>.json`
 
    **You MUST scan the ENTIRE document before extraction. Incomplete scanning leads to missing data.**
 
-   #### Step 3.1: Read Document in Chunks
-   - Read the document in sections (first 500 lines, then next 500, etc.)
-   - Do NOT stop after finding one data source - there may be more
-   - Continue until you reach the end of the document
+   #### Step 3.1: Check Document Size
+   ```bash
+   wc -l <document_path>
+   ```
+   - **Small document (< 2000 lines)**: Read entire document
+   - **Large document (>= 2000 lines)**: Use chunked scanning with Agent
 
-   #### Step 3.2: Build Data Source Inventory
+   #### Step 3.2: Scan Strategy by Document Size
+
+   **Small Document Strategy:**
+   - Read entire document with Read tool
+   - Identify all data sources in one pass
+   - Build complete inventory
+
+   **Large Document Strategy (USE AGENT FOR PARALLEL SCANNING):**
+
+   Launch multiple Agent subagents to scan different sections in parallel:
+   ```
+   Agent 1: Scan lines 1-1000 → Report findings
+   Agent 2: Scan lines 1001-2000 → Report findings
+   Agent 3: Scan lines 2001-3000 → Report findings
+   ...
+   ```
+
+   Each Agent should:
+   - Read its assigned section
+   - Identify tables, species lists, data sources
+   - Count expected entities in that section
+   - Return a summary (NOT the full content)
+
+   **Merge Agent Results:**
+   ```
+   Total Expected Instances = sum of all agents' counts
+   Data Source Inventory = merge all agents' inventories
+   ```
+
+   #### Step 3.3: Build Data Source Inventory
    Create a comprehensive inventory:
    ```
    Data Source Inventory:
@@ -133,14 +164,14 @@ To use: `schemas/<schema_name>.json`
    TOTAL EXPECTED INSTANCES: [sum]
    ```
 
-   #### Step 3.3: Count Expected Instances
+   #### Step 3.4: Count Expected Instances
    - Count entities in EACH table/section separately
    - Sum all counts to get TOTAL expected instances
    - Document this count - you will verify against it later
 
-   #### Step 3.4: Validate Scan Completeness
+   #### Step 3.5: Validate Scan Completeness
    Before proceeding to extraction, verify:
-   - [ ] Read entire document (not just first section)
+   - [ ] Entire document scanned (directly or via agents)
    - [ ] All tables identified and counted
    - [ ] All text-based species/entity lists found
    - [ ] Total expected instances documented
@@ -173,12 +204,39 @@ To use: `schemas/<schema_name>.json`
 
 ## HARD CONSTRAINTS
 
-1. **Scan ENTIRE document before extraction** - do NOT stop after finding one data source
+1. **Scan ENTIRE document before extraction** - use chunked Agent scanning for large documents
 2. **Extract ALL unique (identifier + context) combinations** - never filter based on perceived importance
 3. **Same identifier + different context = separate rows** - never merge
 4. **Every property attempted for every instance** - mark NA only after exhaustive search
 5. **Count expected instances BEFORE extraction** - verify: extracted >= expected
 6. **If extracted < expected** - STOP and re-scan document for missing data sources
+
+## Large Document Handling
+
+For documents > 2000 lines, use this pattern:
+
+```
+# Step 1: Get document line count
+wc -l <document.md>
+
+# Step 2: Calculate chunks (e.g., 1000 lines per chunk)
+chunks = ceil(total_lines / 1000)
+
+# Step 3: Launch parallel Agent subagents
+for i in range(chunks):
+    start = i * 1000 + 1
+    end = min((i + 1) * 1000, total_lines)
+    Agent(f"Scan lines {start}-{end} for data sources, count entities, return summary")
+
+# Step 4: Merge results
+total_expected = sum(agent_results)
+data_sources = merge_inventories(agent_results)
+```
+
+**Key Points:**
+- Each Agent returns a SUMMARY only (not full content)
+- Merge summaries to get complete inventory
+- Avoids token limit issues on large documents
 
 ## Source Tracking
 
@@ -221,7 +279,7 @@ For property fields, track all sources:
 ## Quality Checklist
 
 Before marking complete:
-- [ ] **ENTIRE document scanned** (not just first section)
+- [ ] **ENTIRE document scanned** (directly or via Agent chunks)
 - [ ] **Data Source Inventory completed** (all tables/sections listed)
 - [ ] All instances extracted (count matches expected)
 - [ ] Extracted count >= Pre-Scan expected count
