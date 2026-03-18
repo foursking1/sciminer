@@ -1,55 +1,73 @@
 {
   "schema_name": "fossil",
-  "description": "Extract fossil occurrence data from paleontology papers, including species names, geological ages, locations, and ecological attributes",
+  "description": "Schema for fossil data extraction from paleontological literature",
   "fields": [
     {
       "name": "fossil_name",
       "type": "identifier",
       "scope": "entity",
       "data_type": "string",
-      "description": "Fossil species scientific name"
+      "description": "Scientific name of the fossil species"
     },
     {
       "name": "geologic_time",
       "type": "context",
       "data_type": "string",
-      "description": "Geological age or time period (e.g., Eocene, Oligocene)"
+      "description": "Geological age or time period. Different values create separate rows for the same fossil_name."
     },
     {
       "name": "geographic_location",
       "type": "context",
       "data_type": "string",
-      "description": "Geographic location where fossil was found"
+      "description": "Geographic location where fossil was found."
     },
     {
       "name": "water_depth",
       "type": "property",
       "data_type": "string",
-      "description": "Water depth range or bathymetric zone"
+      "description": "Water depth of depositional environment"
     },
     {
       "name": "ecologic_type",
       "type": "property",
       "data_type": "string",
-      "description": "Ecological classification (e.g., benthic, planktic)"
+      "description": "Ecological classification (e.g., benthic, planktonic)"
     },
     {
-      "name": "formation",
+      "name": "fossil_group",
       "type": "property",
       "data_type": "string",
-      "description": "Geological formation name"
+      "description": "Taxonomic group (e.g., foraminifera, mollusca)"
+    },
+    {
+      "name": "nomenclator",
+      "type": "property",
+      "data_type": "string",
+      "description": "Author who named the species"
     },
     {
       "name": "latitude",
       "type": "property",
       "data_type": "string",
-      "description": "Latitude coordinate"
+      "description": "Latitude coordinate of fossil locality"
     },
     {
       "name": "longitude",
       "type": "property",
       "data_type": "string",
-      "description": "Longitude coordinate"
+      "description": "Longitude coordinate of fossil locality"
+    },
+    {
+      "name": "formation",
+      "type": "property",
+      "data_type": "string",
+      "description": "Geological formation where fossil was found"
+    },
+    {
+      "name": "stratigraphic_range",
+      "type": "property",
+      "data_type": "string",
+      "description": "Stratigraphic range of the fossil species"
     }
   ],
   "row_identity": ["fossil_name", "geologic_time", "geographic_location"],

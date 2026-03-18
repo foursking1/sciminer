@@ -164,12 +164,39 @@ To use: `schemas/<schema_name>.json`
    TOTAL EXPECTED INSTANCES: [sum]
    ```
 
-   #### Step 3.4: Count Expected Instances
+   #### Step 3.4: Extract Global/Site-Level Attributes
+   **CRITICAL**: Many scientific papers have site-level or study-level attributes that apply to ALL entities.
+
+   **Common Global Attributes:**
+   | Field | Typical Source | Example |
+   |-------|----------------|---------|
+   | water_depth | Site description | "water depth at this site is 4809.8 m" |
+   | latitude | Coordinates section | "Site 841 is located at 20°S" |
+   | longitude | Coordinates section | "175°W" |
+   | formation | Stratigraphy section | "Unit V (549-605 mbsf)" |
+   | geographic_location | Abstract/Introduction | "Tonga forearc region" |
+
+   **How to Extract Global Attributes:**
+   1. Search for keywords: "site", "location", "depth", "coordinates", "formation", "latitude", "longitude"
+   2. Look in: Abstract, Introduction, Methods, Site Description sections
+   3. Record the value AND its source location
+   4. Apply to ALL extracted entities
+
+   **Example Output:**
+   ```
+   Global Attributes Found:
+   - water_depth: "4809.8 m" (Line 17: "The water depth at this site is 4809.8 m")
+   - latitude: "30-40°S (paleo)" (Line 208)
+   - geographic_location: "Site 841, Tonga forearc" (Line 17)
+   - formation: "Unit V volcanic sandstone" (Line 39)
+   ```
+
+   #### Step 3.5: Count Expected Instances
    - Count entities in EACH table/section separately
    - Sum all counts to get TOTAL expected instances
    - Document this count - you will verify against it later
 
-   #### Step 3.5: Validate Scan Completeness
+   #### Step 3.6: Validate Scan Completeness
    Before proceeding to extraction, verify:
    - [ ] Entire document scanned (directly or via agents)
    - [ ] All tables identified and counted

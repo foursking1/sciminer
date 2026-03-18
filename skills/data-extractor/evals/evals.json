@@ -3,6 +3,17 @@
   "evals": [
     {
       "id": 1,
+      "name": "markdown-extraction-complete",
+      "prompt": "从 examples/test_docs/odp.proc.sr.135.114.1994.mmd 提取所有化石数据，使用 fossil schema。这是一篇关于 ODP Site 841 的浮游有孔虫研究论文。",
+      "expected_output": "提取文档中所有有孔虫物种数据，包括 Table 3 中的物种列表以及文本中提到的物种",
+      "files": ["examples/test_docs/odp.proc.sr.135.114.1994.mmd", "skills/data-extractor/schemas/fossil.json"],
+      "assertions": [
+        {"name": "csv_created", "description": "生成 CSV 输出文件", "type": "file_exists", "path": "*/*/output.csv"},
+        {"name": "comprehensive_extraction", "description": "提取至少 40 个物种（Table 3 包含约 50 种）", "type": "row_count", "min": 40}
+      ]
+    },
+    {
+      "id": 2,
       "name": "pdf-to-csv-with-schema",
       "prompt": "从 examples/test_docs/Baldassini et al., 2012.pdf 提取数据，使用 fossil schema",
       "expected_output": "解析 PDF 后提取化石数据到 CSV",
@@ -13,7 +24,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": 3,
       "name": "missing-schema-triggers-creator",
       "prompt": "从 examples/test_docs/Baldassini et al., 2012.pdf 提取数据，schema 名字叫 paleontology_data",
       "expected_output": "检测到 schema 不存在，调用 schema-creator 创建它",
