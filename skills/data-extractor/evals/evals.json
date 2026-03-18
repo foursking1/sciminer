@@ -3,37 +3,23 @@
   "evals": [
     {
       "id": 1,
-      "name": "basic-extraction",
-      "prompt": "Extract data from this document using the fossil schema. The document is at examples/test_docs/keller_excerpt.md and contains a table with fossil species data.",
-      "expected_output": "CSV file with fossil_name, geologic_time, geographic_location, water_depth, ecologic_type columns, plus extraction_plan.md and intermediate_data.json",
-      "files": ["examples/test_docs/keller_excerpt.md"],
+      "name": "pdf-to-csv-with-schema",
+      "prompt": "从 examples/test_docs/Baldassini et al., 2012.pdf 提取数据，使用 fossil schema",
+      "expected_output": "解析 PDF 后提取化石数据到 CSV",
+      "files": ["examples/test_docs/Baldassini et al., 2012.pdf", "skills/data-extractor/schemas/fossil.json"],
       "assertions": [
-        {"name": "csv_created", "description": "Output CSV file exists with correct columns", "type": "file_exists", "path": "extraction_outputs/*/keller_excerpt/output.csv"},
-        {"name": "has_provenance", "description": "Extraction plan and intermediate data created", "type": "file_exists", "path": "extraction_outputs/*/keller_excerpt/extraction_plan.md"},
-        {"name": "correct_columns", "description": "CSV has all schema columns plus document_id", "type": "csv_columns", "expected": ["document_id", "fossil_name", "geologic_time", "geographic_location", "water_depth", "ecologic_type", "formation", "latitude", "longitude"]},
-        {"name": "extracted_instances", "description": "At least 3 fossil instances extracted", "type": "row_count", "min": 3}
+        {"name": "pdf_parsed", "description": "PDF 被解析为 markdown", "type": "file_exists", "path": "parsed_documents/*/output_mineru.md"},
+        {"name": "csv_created", "description": "生成 CSV 输出文件", "type": "file_exists", "path": "extraction_outputs/*/*/output.csv"}
       ]
     },
     {
       "id": 2,
-      "name": "schema-inference",
-      "prompt": "I have a document about shale gas geochemical data. Extract the sample measurements from it. The document is at examples/test_docs/shale_excerpt.md",
-      "expected_output": "Should either use shale_gas schema or ask user to specify schema. If shale_gas schema used, extract sample_id, depth_m, toc_percent, etc.",
-      "files": ["examples/test_docs/shale_excerpt.md"],
+      "name": "missing-schema-triggers-creator",
+      "prompt": "从 examples/test_docs/Baldassini et al., 2012.pdf 提取数据，schema 名字叫 paleontology_data",
+      "expected_output": "检测到 schema 不存在，调用 schema-creator 创建它",
+      "files": ["examples/test_docs/Baldassini et al., 2012.pdf"],
       "assertions": [
-        {"name": "schema_selected", "description": "Either used built-in schema or asked user to specify", "type": "content_check", "patterns": ["shale_gas", "schema", "which schema"]},
-        {"name": "csv_created", "description": "Output CSV file exists", "type": "file_exists", "path": "extraction_outputs/*/*/output.csv"}
-      ]
-    },
-    {
-      "id": 3,
-      "name": "context-row-separation",
-      "prompt": "Extract fossil data from this document. Pay attention: the same species appears in different geological time periods. Document: examples/test_docs/multi_period.md",
-      "expected_output": "CSV with multiple rows for the same species when it appears in different time periods (context creates separate rows)",
-      "files": ["examples/test_docs/multi_period.md"],
-      "assertions": [
-        {"name": "context_separation", "description": "Same species in different time periods creates separate rows", "type": "custom", "check": "Verify that if a species appears in multiple time periods, there are multiple rows"},
-        {"name": "row_identity_correct", "description": "Row identity combines fossil_name + geologic_time + geographic_location", "type": "csv_columns", "expected": ["fossil_name", "geologic_time", "geographic_location"]}
+        {"name": "schema_created", "description": "新 schema 被创建", "type": "file_exists", "path": "skills/data-extractor/schemas/paleontology_data.json"}
       ]
     }
   ]

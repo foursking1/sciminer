@@ -112,11 +112,38 @@ To use: `schemas/<schema_name>.json`
    ├── decisions.md            # Extraction decisions log
    └── output.csv              # Final output
    ```
-3. **Pre-Scan Document**
-   - Derive keywords from field names
-   - Find field locations (tables, text, figures)
-   - Build entity relation maps
-   - Count expected instances
+3. **Pre-Scan Document (CRITICAL - DO NOT SKIP)**
+
+   **You MUST scan the ENTIRE document before extraction. Incomplete scanning leads to missing data.**
+
+   #### Step 3.1: Read Document in Chunks
+   - Read the document in sections (first 500 lines, then next 500, etc.)
+   - Do NOT stop after finding one data source - there may be more
+   - Continue until you reach the end of the document
+
+   #### Step 3.2: Build Data Source Inventory
+   Create a comprehensive inventory:
+   ```
+   Data Source Inventory:
+   - Table 1: [location, description, expected entities]
+   - Table 2: [location, description, expected entities]
+   - Text Section X: [location, entity type, expected count]
+   - Figure captions: [relevant figures with data]
+   - ...
+   TOTAL EXPECTED INSTANCES: [sum]
+   ```
+
+   #### Step 3.3: Count Expected Instances
+   - Count entities in EACH table/section separately
+   - Sum all counts to get TOTAL expected instances
+   - Document this count - you will verify against it later
+
+   #### Step 3.4: Validate Scan Completeness
+   Before proceeding to extraction, verify:
+   - [ ] Read entire document (not just first section)
+   - [ ] All tables identified and counted
+   - [ ] All text-based species/entity lists found
+   - [ ] Total expected instances documented
 
 ### Phase 2: Extract (Iterative Loop)
 
@@ -146,10 +173,12 @@ To use: `schemas/<schema_name>.json`
 
 ## HARD CONSTRAINTS
 
-1. **Extract ALL unique (identifier + context) combinations** - never filter
-2. **Same identifier + different context = separate rows** - never merge
-3. **Every property attempted for every instance** - mark NA only after exhaustive search
-4. **Count expected instances before extraction** - verify: extracted >= expected
+1. **Scan ENTIRE document before extraction** - do NOT stop after finding one data source
+2. **Extract ALL unique (identifier + context) combinations** - never filter based on perceived importance
+3. **Same identifier + different context = separate rows** - never merge
+4. **Every property attempted for every instance** - mark NA only after exhaustive search
+5. **Count expected instances BEFORE extraction** - verify: extracted >= expected
+6. **If extracted < expected** - STOP and re-scan document for missing data sources
 
 ## Source Tracking
 
@@ -192,10 +221,12 @@ For property fields, track all sources:
 ## Quality Checklist
 
 Before marking complete:
+- [ ] **ENTIRE document scanned** (not just first section)
+- [ ] **Data Source Inventory completed** (all tables/sections listed)
 - [ ] All instances extracted (count matches expected)
+- [ ] Extracted count >= Pre-Scan expected count
 - [ ] All properties attempted for all instances
 - [ ] No property has >50% NA without justification
-- [ ] Pre-Scan completed
 - [ ] Layer 3 Completeness Audit passed
 - [ ] No duplicate instances
 - [ ] Source locations recorded
