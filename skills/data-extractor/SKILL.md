@@ -178,6 +178,14 @@ To use: `schemas/<schema_name>.json`
 
 ### Phase 2: Extract (Iterative Loop)
 
+**CRITICAL: Extract from ALL data sources identified in Pre-Scan**
+
+Before extraction, verify you have inventoried ALL sources:
+- Species/entity lists in text or appendix
+- Data tables (abundance, distribution, measurements, etc.)
+- Figure plates or illustrations with names
+- Any other tabular data
+
 ```
 ┌─────────────────────────────────────────┐
 │  1. ASSESS: What's extracted? Missing?  │
@@ -187,6 +195,24 @@ To use: `schemas/<schema_name>.json`
 │  5. DECIDE: Continue or output?         │
 └─────────────────────────────────────────┘
 ```
+
+**Extraction Priority:**
+- Process ALL data sources - do not skip any
+- Start with the source that has the MOST entities (often detailed tables)
+- Use Pre-Scan entity counts to determine which source has the most data
+- Common source types: abundance tables, species lists, figure plates, text mentions
+
+**For EACH data source in your inventory:**
+- Read the table/section
+- Extract ALL unique entities (not just the first few!)
+- Track source location for each entity
+- Mark as "extracted from source X" in progress.md
+
+**WARNING: Common Mistake**
+- Pre-Scan finds multiple data sources (e.g., main list + detailed tables)
+- Extraction only processes the main/first source
+- Result: Missing entities from other sources!
+- FIX: After extracting from one source, check if more sources remain in inventory
 
 **4-Layer Validation:**
 | Layer | Check |
@@ -228,12 +254,14 @@ To use: `schemas/<schema_name>.json`
 ## HARD CONSTRAINTS
 
 1. **Scan ENTIRE document before extraction** - use chunked Agent scanning for large documents
-2. **Extract ALL unique (identifier + context) combinations** - never filter based on perceived importance
-3. **Same identifier + different context = separate rows** - never merge
-4. **Every property attempted for every instance** - mark NA only after Phase 3 self-correction
-5. **Count expected instances BEFORE extraction** - verify: extracted >= expected
-6. **If extracted < expected** - STOP and re-scan document for missing data sources
-7. **Never accept >50% NA without trying**: text search, re-reading key sections, inference, checking figures/tables
+2. **Extract from ALL data sources in inventory** - detailed tables often contain more entities than summary lists
+3. **Extract ALL unique (identifier + context) combinations** - never filter based on perceived importance
+4. **Same identifier + different context = separate rows** - never merge
+5. **Every property attempted for every instance** - mark NA only after Phase 3 self-correction
+6. **Count expected instances BEFORE extraction** - verify: extracted >= expected
+7. **If extracted < expected** - STOP and re-scan document for missing data sources
+8. **Never accept >50% NA without trying**: text search, re-reading key sections, inference, checking figures/tables
+9. **Validate extraction completeness**: Compare extracted count against EACH data source's expected count
 
 ## Large Document Handling
 
@@ -304,9 +332,10 @@ For property fields, track all sources:
 
 Before marking complete:
 - [ ] **ENTIRE document scanned** (directly or via Agent chunks)
-- [ ] **Data Source Inventory completed** (all tables/sections listed)
-- [ ] All instances extracted (count matches expected)
-- [ ] Extracted count >= Pre-Scan expected count
+- [ ] **Data Source Inventory completed** (all tables/sections listed with entity counts)
+- [ ] **ALL data sources extracted** (check EACH source in inventory, not just main list)
+- [ ] Extracted count >= Pre-Scan expected count (sum of ALL sources)
+- [ ] **Detailed tables processed** (if present, these often contain more entities than summary lists)
 - [ ] **Missing fields checked and searched** (Phase 3 Step 1-2)
 - [ ] All properties attempted for all instances
 - [ ] No property has >50% NA without justification

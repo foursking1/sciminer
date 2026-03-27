@@ -1,49 +1,6 @@
 {
-  "name": "sciminer",
-  "version": "1.0.1",
-  "description": "Claude Code skills for autonomous data extraction from scientific documents",
-  "keywords": [
-    "claude-code",
-    "claude-skills",
-    "data-extraction",
-    "pdf-parsing",
-    "scientific-documents",
-    "scientific-data",
-    "literature-mining"
-  ],
-  "author": "foursking1",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/foursking1/sciminer.git"
-  },
-  "bugs": {
-    "url": "https://github.com/foursking1/sciminer/issues"
-  },
-  "homepage": "https://github.com/foursking1/sciminer#readme",
-  "files": [
-    "agents/",
-    "commands/",
-    "skills/",
-    "examples/",
-    ".claude-plugin/",
-    "README.md",
-    "LICENSE"
-  ],
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "claude-code": {
-    "skills": [
-      "skills/document-ingestion",
-      "skills/schema-creator",
-      "skills/data-extractor"
-    ],
-    "agents": [
-      "agents/extractor"
-    ],
-    "commands": [
-      "commands/extract.md"
-    ]
-  }
+  "name": "data-extractor-plugin",
+  "version": "1.0.0",
+  "type": "module",
+  "main": ".opencode/plugins/data-extractor.js"
 }

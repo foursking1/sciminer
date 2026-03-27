@@ -1,0 +1,24 @@
+{
+  "name": "data-extractor",
+  "description": "Extract structured scientific data from parsed markdown documents into CSV datasets",
+  "version": "1.0.0",
+  "schema_version": "1.0",
+  "entry_point": "SKILL.md",
+  "capabilities": {
+    "tools": ["Read", "Write", "Edit", "Glob", "Grep", "Bash", "Agent"],
+    "resources": ["schemas/*.json"],
+    "templates": ["fossil", "shale_gas"]
+  },
+  "config": {
+    "workspace_directory": "data-extractor-workspace",
+    "schemas_directory": "schemas",
+    "references_directory": "references"
+  },
+  "triggers": [
+    "extract data from",
+    "convert to CSV",
+    "extract structured data",
+    "fossil data",
+    "geochemical data"
+  ]
+}

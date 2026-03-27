@@ -1,0 +1,4 @@
+{
+  "$schema": "https://opencode.ai/schema/config.json",
+  "plugin": ["data-extractor@file+./"]
+}

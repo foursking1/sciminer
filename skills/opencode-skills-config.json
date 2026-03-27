@@ -1,0 +1,26 @@
+# OpenCode Skill Configuration
+# Copy this to ~/.config/opencode/skills.json or your opencode config directory
+
+{
+  "skills": {
+    "data-extractor": {
+      "enabled": true,
+      "path": "skills/data-extractor",
+      "source": "local"
+    },
+    "document-ingestion": {
+      "enabled": true,
+      "path": "skills/document-ingestion",
+      "source": "local"
+    },
+    "schema-creator": {
+      "enabled": true,
+      "path": "skills/schema-creator",
+      "source": "local"
+    }
+  },
+  "schemas": {
+    "fossil": "skills/data-extractor/schemas/fossil.json",
+    "shale_gas": "skills/data-extractor/schemas/shale_gas.json"
+  }
+}
